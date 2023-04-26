@@ -2,7 +2,7 @@
 #include <vector>
 #include <random>
 
-#include "double2d.h"
+#include "linalg.h"
 
 #include <SDL2/SDL.h>
 
@@ -15,8 +15,8 @@ int main()
   srand(time(NULL));
 
   std::vector<double> frequencies;
-  std::vector<linalg::Double2d> points;
-  std::vector<linalg::Double2d> signals;
+  std::vector<linalg::Vector<double>> points;
+  std::vector<linalg::Vector<double>> signals;
 
   bool run = true;
 
@@ -28,14 +28,14 @@ int main()
 
   for (int i = 1; i < waves + 1; i++)
   {
-    signals.push_back(linalg::Double2d(i, phase, linalg::Format::Polar));
+    signals.push_back(linalg::Vector<double>(i, phase, linalg::Format::Polar));
 
     // Start with random phase and frequency
     frequencies.push_back(double(rand() % 100 + 1) / 1000);
     phase += M_PI / (rand() % 10 + 1);
   }
 
-  linalg::Double2d b(4, -M_PI / 2, linalg::Format::Polar);
+  linalg::Vector<double> b(4, -M_PI / 2, linalg::Format::Polar);
 
   SDL_Init(SDL_INIT_VIDEO);
 
@@ -73,7 +73,7 @@ int main()
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
-    linalg::Double2d vec;
+    linalg::Vector<double> vec(2);
     for (int i = 0; i < signals.size(); ++i)
     {
       signals.at(i) = signals.at(i).RotateZ(-frequencies.at(i));
@@ -83,7 +83,7 @@ int main()
     for (const auto& signal : signals)
       SDL_RenderDrawLine(renderer, centerX, centerY, centerX + scale * signal.X(), centerY + scale * signal.Y());
 
-    points.push_back(linalg::Double2d(centerX + scale * signals.back().Mag(), centerY + scale * vec.Y()));
+    points.push_back(linalg::Vector<double>(centerX + scale * signals.back().Mag(), centerY + scale * vec.Y()));
 
     auto proj = vec.Projection(b);
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
@@ -103,7 +103,7 @@ int main()
         SDL_RenderDrawLine(renderer, iter->X(), iter->Y(), prev->X(), prev->Y());
       }
 
-      *iter = *iter + linalg::Double2d(1, 0);
+      *iter = *iter + linalg::Vector<double>(1, 0);
       if (iter->X() >= WIDTH + 5)
         iter = points.erase(iter);
       else
