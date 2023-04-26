@@ -1,10 +1,9 @@
 #pragma once
 
-#include <stdint.h>
-
 #include <cmath>
 #include <functional>
 #include <initializer_list>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -47,13 +46,10 @@ public:
 
   virtual ~Vector();
 
-  T X() const;
-  T Y() const;
-  T Z() const;
-
-  uint32_t Size() const;
-
-  std::string ToString() const;
+  typename std::vector<T>::iterator begin();
+  typename std::vector<T>::const_iterator begin() const;
+  typename std::vector<T>::iterator end();
+  typename std::vector<T>::const_iterator end() const;
 
   bool operator==(const Vector<T>& v) const;
   bool operator!=(const Vector<T>& v) const;
@@ -79,7 +75,16 @@ public:
   Vector<T>& operator/=(const T& v);
 
   T& operator[](const size_t index);
+
+  friend std::ostream& operator<<(std::ostream& os, const Vector<T>& v) { return os << v.ToString(); }
+  std::string ToString() const;
+
+  T X() const;
+  T Y() const;
+  T Z() const;
   T At(const size_t index) const;
+
+  uint32_t Size() const;
 
   double Mag() const;
   double Angle() const;
