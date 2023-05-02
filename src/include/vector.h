@@ -111,6 +111,8 @@ public:
 
   Vector<T> Lerp(const Vector<T>& v, T amount) const;
 
+  void SetMagnitude(T magnitude);
+  void Limit(T limit);
   void Apply(std::function<void(T& v)> function);
 
 private:

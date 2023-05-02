@@ -529,6 +529,29 @@ Vector<T> Vector<T>::Lerp(const Vector<T>& v, T amount) const
 }
 
 template <class T>
+void Vector<T>::SetMagnitude(T magnitude)
+{
+  double mag = Mag();
+  if (Size() > 2)
+    return;
+
+   mData[0] *= magnitude / mag;
+   mData[1] *= magnitude / mag;
+}
+
+template <class T>
+void Vector<T>::Limit(T limit)
+{
+  double mag = Mag();
+  if (mag < limit || Size() > 2)
+    return;
+
+   auto f = std::min(mag, (double)limit) / mag;
+   mData[0] *= f;
+   mData[1] *= f;
+}
+
+template <class T>
 void Vector<T>::Apply(std::function<void(T& v)> function)
 {
   if (!function)
