@@ -532,23 +532,21 @@ template <class T>
 void Vector<T>::SetMagnitude(T magnitude)
 {
   double mag = Mag();
-  if (Size() > 2)
-    return;
 
-   mData[0] *= magnitude / mag;
-   mData[1] *= magnitude / mag;
+  for (auto& v : mData)
+     v *= magnitude / mag;
 }
 
 template <class T>
 void Vector<T>::Limit(T limit)
 {
   double mag = Mag();
-  if (mag < limit || Size() > 2)
+  if (mag < limit)
     return;
 
-   auto f = std::min(mag, (double)limit) / mag;
-   mData[0] *= f;
-   mData[1] *= f;
+  auto f = std::min(mag, (double)limit) / mag;
+  for (auto& v : mData)
+    v *= f;
 }
 
 template <class T>
