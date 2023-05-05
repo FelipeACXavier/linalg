@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5.1)
 include(GNUInstallDirs)
 
 add_library(${PROJECT_NAME}
-  SHARED
+  STATIC
     vector.cpp
     matrix.cpp
 )
